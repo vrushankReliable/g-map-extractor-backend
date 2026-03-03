@@ -1,0 +1,33 @@
+{
+  "name": "gmap-scraper-server",
+  "version": "3.0.0",
+  "description": "Production-grade Google Maps data scraper with Puppeteer, job queues, and database storage",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server.js",
+    "dev": "node --watch server.js",
+    "legacy": "node index.js",
+    "scrape:region": "node scrapeRegion.js",
+    "scrape:help": "node scrapeRegion.js --help",
+    "scrape:regions": "node scrapeRegion.js --list-regions",
+    "worker": "node workers/scrapeWorker.js",
+    "db:stats": "node scripts/dbStats.js"
+  },
+  "dependencies": {
+    "bullmq": "^5.67.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.18.2",
+    "ioredis": "^5.9.2",
+    "mongoose": "^9.1.5",
+    "nodemon": "^3.1.11",
+    "puppeteer": "^22.0.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "uuid": "^13.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
