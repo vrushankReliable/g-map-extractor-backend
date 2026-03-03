@@ -5,8 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon server.js",
-    "dev": "node --watch server.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
     "legacy": "node index.js",
     "scrape:region": "node scrapeRegion.js",
     "scrape:help": "node scrapeRegion.js --help",
