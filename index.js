@@ -11,7 +11,7 @@ app.use(express.json());
 // Streaming Endpoint
 app.get('/api/scrape', async (req, res) => {
   const query = req.query.query;
-  
+
   if (!query) {
     return res.status(400).json({ error: 'Query is required' });
   }
@@ -22,7 +22,7 @@ app.get('/api/scrape', async (req, res) => {
   res.setHeader('Connection', 'keep-alive');
 
   console.log(`Starting/Streaming scrape for: ${query}`);
-  
+
   let browser = null;
 
   try {
@@ -32,7 +32,7 @@ app.get('/api/scrape', async (req, res) => {
     });
 
     const page = await browser.newPage();
-    
+
     // Set viewport to a typical desktop size
     await page.setViewport({ width: 1366, height: 768 });
 
@@ -55,18 +55,18 @@ app.get('/api/scrape', async (req, res) => {
     // SCROLL & SCRAPE LOOP
     // We try to scroll heavily to ensure data keeps coming
     for (let i = 0; i < 500; i++) { // Max iterations to prevent infinite loop if something breaks
-      
+
       // 1. Scrape visible items CURRENTLY on the page
       const newItems = await page.evaluate(() => {
         const items = Array.from(document.querySelectorAll('div[role="article"]'));
-        
+
         return items.map(item => {
           const text = item.innerText;
           const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-          
+
           // Heuristics
           const name = item.getAttribute('aria-label') || lines[0] || 'Unknown';
-          
+
           // Rating: Look for "4.5 (123)"
           let rating = 'N/A';
           let reviews = '0';
@@ -82,22 +82,22 @@ app.get('/api/scrape', async (req, res) => {
 
           // Category: Usually directly after rating or near top
           // We'll exclude lines that look like address or status
-          const category = lines.find(l => 
-             l !== name && 
-             l !== ratingLine && 
-             !l.match(/Open|Closed|Opens|Closes/) && 
-             !l.match(/\d+/) && // Avoid address lines starting with numbers
-             !l.startsWith('(')
+          const category = lines.find(l =>
+            l !== name &&
+            l !== ratingLine &&
+            !l.match(/Open|Closed|Opens|Closes/) &&
+            !l.match(/\d+/) && // Avoid address lines starting with numbers
+            !l.startsWith('(')
           ) || lines[1] || 'N/A';
 
           // Status
           const status = lines.find(l => /Open|Closed|Opens|Closes/.test(l)) || 'Unknown';
 
           // Address: Look for standard address indicators
-          const address = lines.find(l => 
-            (l.includes(',') || l.match(/\d+\s[A-Za-z]+/) || l.match(/St|Rd|Ave|Blvd|Lane/)) && 
-            l !== name && 
-            l !== category && 
+          const address = lines.find(l =>
+            (l.includes(',') || l.match(/\d+\s[A-Za-z]+/) || l.match(/St|Rd|Ave|Blvd|Lane/)) &&
+            l !== name &&
+            l !== category &&
             l !== status
           ) || 'N/A';
 
@@ -109,12 +109,12 @@ app.get('/api/scrape', async (req, res) => {
           const mainUrl = mainLink ? mainLink.href : '';
 
           for (const link of links) {
-             const href = link.href;
-             // Check if it is a real external link
-             if (href && !href.includes('google.com/maps') && !href.includes('google.com/search')) {
-                 website = href;
-                 break; // Take first external link
-             }
+            const href = link.href;
+            // Check if it is a real external link
+            if (href && !href.includes('google.com/maps') && !href.includes('google.com/search')) {
+              website = href;
+              break; // Take first external link
+            }
           }
 
           // Phone: Regex search in text
@@ -127,9 +127,9 @@ app.get('/api/scrape', async (req, res) => {
           // If not available, fall back to strictly Name + Address + Phone
           let id = '';
           if (mainUrl) {
-             id = mainUrl.split('!')[0]; // Use the base part of the URL or the whole thing
+            id = mainUrl.split('!')[0]; // Use the base part of the URL or the whole thing
           } else {
-             id = name + '|' + address;
+            id = name + '|' + address;
           }
 
           return {
@@ -162,10 +162,10 @@ app.get('/api/scrape', async (req, res) => {
       const result = await page.evaluate(async (selector) => {
         const el = document.querySelector(selector);
         if (!el) return { endReached: true, h: 0 };
-        
+
         el.scrollTop = el.scrollHeight;
-        
-        return { 
+
+        return {
           h: el.scrollHeight,
           endReached: document.body.innerText.includes("You've reached the end of the list")
         };
@@ -199,7 +199,7 @@ app.get('/api/scrape', async (req, res) => {
 
   } catch (error) {
     console.error('Streaming error:', error);
-    res.write(`event: error\ndata: ${JSON.stringify({error: error.message})}\n\n`);
+    res.write(`event: error\ndata: ${JSON.stringify({ error: error.message })}\n\n`);
     res.end();
   } finally {
     if (browser) await browser.close();
