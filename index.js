@@ -1,9 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import puppeteer from 'puppeteer-extra';
-import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-
-puppeteer.use(StealthPlugin());
+import puppeteer from 'puppeteer';
 
 const app = express();
 const PORT = 3001;

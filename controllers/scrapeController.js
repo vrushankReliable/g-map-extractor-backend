@@ -1005,7 +1005,7 @@ export const extractPhonesForLeads = async (req, res) => {
 
         // Background extraction
         const { extractPlaceDetails } = await import('../scraper/detailScraper.js');
-        const puppeteer = (await import('puppeteer-extra')).default;
+        const puppeteer = (await import('puppeteer')).default;
 
         let phonesFound = 0;
         const browser = await puppeteer.launch({ headless: 'new' });

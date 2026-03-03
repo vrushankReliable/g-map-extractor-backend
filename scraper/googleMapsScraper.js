@@ -14,8 +14,7 @@
  * Users must comply with applicable laws and terms of service.
  */
 
-import puppeteer from 'puppeteer-extra';
-import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import puppeteer from 'puppeteer';
 import config from '../config/index.js';
 import {
     getRandomUserAgent,
@@ -33,10 +32,6 @@ import {
 import AsyncQueue from '../utils/asyncQueue.js';
 import { extractPlaceDetails } from './detailScraper.js';
 import { generateSearchLocations, parseLocationQuery, extractKeywordFromQuery } from '../geo/regions.js';
-
-if (config.scraper.enableStealth) {
-    puppeteer.use(StealthPlugin());
-}
 
 /**
  * Main Google Maps Scraper Class

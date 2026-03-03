@@ -16,8 +16,7 @@
  * Users must comply with applicable laws and terms of service.
  */
 
-import puppeteer from 'puppeteer-extra';
-import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import puppeteer from 'puppeteer';
 import config from '../config/index.js';
 import {
     getRandomUserAgent,
@@ -26,11 +25,6 @@ import {
     formatPhone,
     cleanUrl,
 } from '../utils/helpers.js';
-
-// Apply stealth plugin
-if (config.scraper?.enableStealth !== false) {
-    puppeteer.use(StealthPlugin());
-}
 
 /**
  * @typedef {Object} ScrapedPlace
