@@ -76,11 +76,6 @@ export class GoogleMapsScraper {
             defaultViewport: config.puppeteer.defaultViewport,
         };
 
-        // Add executable path if specified in config
-        if (config.puppeteer.executablePath) {
-            launchOptions.executablePath = config.puppeteer.executablePath;
-        }
-
         this.browser = await puppeteer.launch(launchOptions);
         this.page = await this.browser.newPage();
 
