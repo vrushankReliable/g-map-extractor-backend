@@ -26,6 +26,7 @@ const config = {
 
     puppeteer: {
         headless: true, // Run in headless mode (no browser window)
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',

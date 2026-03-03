@@ -103,6 +103,11 @@ export class TileScraper {
             defaultViewport: { width: 1920, height: 1080 },
         };
 
+        // Add executable path if specified in config
+        if (config.puppeteer.executablePath) {
+            launchOptions.executablePath = config.puppeteer.executablePath;
+        }
+
         this.browser = await puppeteer.launch(launchOptions);
         this.page = await this.browser.newPage();
 
