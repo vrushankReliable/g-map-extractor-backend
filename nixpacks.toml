@@ -2,7 +2,7 @@
 nixPkgs = ["nodejs_18", "chromium"]
 
 [phases.install]
-cmds = ["npm install"]
+cmds = ["npm install --omit=optional"]
 
 [phases.build]
 cmds = ["echo 'Build phase complete'"]
@@ -10,6 +10,6 @@ cmds = ["echo 'Build phase complete'"]
 [start]
 cmd = "npm start"
 
-[env]
+[variables]
 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
-PUPPETEER_EXECUTABLE_PATH = "/nix/var/nix/profiles/default/bin/chromium"
+PUPPETEER_EXECUTABLE_PATH = "chromium"
